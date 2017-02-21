@@ -1,4 +1,2 @@
 .serverless/
 .serverless
-.serverless/cloudformation-template-update-stack.json
-.serverless/statsLite.zip
