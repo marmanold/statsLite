@@ -3,24 +3,27 @@
 const uuid = require('uuid');
 const AWS = require('aws-sdk');
 
+var parser = require('ua-parser-js');
+
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 module.exports.log = (event, context, callback) => {
     const data = JSON.parse(event.body);
-    if (typeof data.title !== 'string') {
-        console.error('Validation Failed');
-        callback(new Error('Couldn\'t log page visit.'));
-        return;
-    }
 
     const date = new Date();
     const isoTime = date.toISOString();
+
+    var uAgentRes = parser(data.browser);
 
     const params = {
         uuid: uuid.v4(),
         site: data.site,
         referrer: data.referrer,
-        browser: data.browser,
+        uagent: data.browser,
+        browser: `${uAgentRes.browser.name} ${uAgentRes.browser.version}`,
+        platform: `${uAgentRes.device.type}`,
+        device: `${uAgentRes.device.vendor} ${uAgentRes.device.model}`,
+        os: `${uAgentRes.os.name} ${uAgentRes.os.version}`,
         resolution: data.resolution,
         page: data.page,
         title: data.title,
@@ -48,3 +51,5 @@ module.exports.log = (event, context, callback) => {
     });
 
 };
+
+//curl -X POST https://bz2gq8s1sb.execute-api.us-east-1.amazonaws.com/dev/log --data '{"site":"marcom","referrer":"http://localhost:1313/","browser":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:51.0) Gecko/20100101 Firefox/51.0","resolution":"2560x1440","page":"http://localhost:1313/","title":"Marmanold.com"}'
