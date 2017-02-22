@@ -1,0 +1,14 @@
+{
+  "name": "statsLite",
+  "version": "1.0.0",
+  "description": "A Serverless function to log site visits for my personal projects.",
+  "author": "Michael Arnold <farley@olindata.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marmanold/statsLite.git"
+  },
+  "dependencies": {
+    "uuid": "^2.0.3"
+  }
+}
