@@ -5,6 +5,7 @@ provider:
   runtime: nodejs4.3
   environment:
     DYNAMODB_TABLE: statsLiteLog
+    DYNAMODB_SITE_INDEX: site-timestamp-index
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -14,15 +15,22 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:us-east-1:276902424745:table/statsLiteLog"
+      Resource:
+        - "arn:aws:dynamodb:us-east-1:276902424745:table/statsLiteLog"
+        - "arn:aws:dynamodb:us-east-1:276902424745:table/statsLiteLog/index/*"
 
 functions:
-  hello:
-    handler: handler.hello
   log:
     handler: log.log
     events:
       - http:
           path: log
           method: post
+          cors: true
+  stats:
+    handler: stats.stats
+    events:
+      - http:
+          path: stats
+          method: get
           cors: true
