@@ -11,12 +11,15 @@ module.exports.stats = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     IndexName: process.env.DYNAMODB_SITE_INDEX,
-    KeyConditionExpression: "#st = :site",
+    KeyConditionExpression: "#st = :site AND #ts BETWEEN :start AND :end",
     ExpressionAttributeNames:{
-        "#st": "site"
+        "#st": "site", 
+        "#ts": "timestamp"
     },
     ExpressionAttributeValues: {
-      ":site":"www.marmanold.com"
+      ":site":data.site, 
+      ":start":data.start, 
+      ":end": data.end
     }
   };
 
@@ -32,6 +35,7 @@ module.exports.stats = (event, context, callback) => {
     // create a response
     const response = {
       statusCode: 200,
+      headers: {"Access-Control-Allow-Origin" : "*"}, 
       body: JSON.stringify(result.Items),
     };
     callback(null, response);
