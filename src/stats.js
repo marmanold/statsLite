@@ -23,12 +23,11 @@ module.exports.stats = (event, context, callback) => {
     }
   };
 
-  // fetch todo from the database
   dynamoDb.query(params, (error, result) => {
     // handle potential errors
     if (error) {
       console.error(error);
-      callback(new Error('Couldn\'t query to database.'));
+      callback(new Error('Couldn\'t query the database.'));
       return;
     }
 
@@ -42,5 +41,3 @@ module.exports.stats = (event, context, callback) => {
   });
 
 };
-
-//curl -X POST https://bz2gq8s1sb.execute-api.us-east-1.amazonaws.com/dev/stats --data '{"site":"www.marmanold.com"}'

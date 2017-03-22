@@ -1,5 +1,7 @@
 service: statsLite
 
+frameworkVersion: ">=1.7.0 <2.0.0"
+
 provider:
   name: aws
   runtime: nodejs4.3
@@ -21,16 +23,23 @@ provider:
 
 functions:
   log:
-    handler: log.log
+    handler: src/log.log
     events:
       - http:
           path: log
           method: post
           cors: true
   stats:
-    handler: stats.stats
+    handler: src/stats.stats
     events:
       - http:
           path: stats
           method: post
           cors: true
+  clean:
+    handler: src/clean.clean
+    events:
+      - schedule:
+          name: clean-localhost-from-database
+          description: 'Scheduled event to clear the database of localhost visits.'
+          rate: rate(48 hours)
