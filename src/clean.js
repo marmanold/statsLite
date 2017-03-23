@@ -4,9 +4,9 @@ const AWS = require('aws-sdk');
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.stats = (event, context, callback) => {
+module.exports.clean = (event, context, callback) => {
 
-  const params = {
+  const paramsQuery = {
     TableName: process.env.DYNAMODB_TABLE,
     IndexName: process.env.DYNAMODB_SITE_INDEX,
     KeyConditionExpression: "#st = :site",
@@ -18,21 +18,37 @@ module.exports.stats = (event, context, callback) => {
     }
   };
 
-  dynamoDb.delete(params, (error) => {
+  dynamoDb.query(paramsQuery, (error, result) => {
     // handle potential errors
     if (error) {
       console.error(error);
-      callback(new Error('Couldn\'t clear localhost entries from the database.'));
+      callback(new Error('Couldn\'t query the database.'));
       return;
     }
 
-    // create a response
-    const response = {
-      statusCode: 200,
-      headers: {"Access-Control-Allow-Origin" : "*"}, 
-      body: JSON.stringify({}),
-    };
-    callback(null, response);
+    result.Items.forEach(function(item){
+      let paramsDel = {
+        TableName: process.env.DYNAMODB_TABLE,
+        Key: {
+          uuid: item.uuid,
+        },
+      };
+
+      dynamoDb.delete(paramsDel, (error) => {
+        if (error) {
+          console.error(error);
+          callback(new Error('Couldn\'t clear localhost entries from the database.'));
+          return;
+        }
+      });
+    });
   });
+
+  const response = {
+    statusCode: 200,
+    headers: {"Access-Control-Allow-Origin" : "*"}, 
+    body: JSON.stringify({}),
+  };
+  callback(null, response);
 
 };
