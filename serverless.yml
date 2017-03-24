@@ -21,6 +21,10 @@ provider:
         - "arn:aws:dynamodb:us-east-1:276902424745:table/statsLiteLog"
         - "arn:aws:dynamodb:us-east-1:276902424745:table/statsLiteLog/index/*"
 
+package:
+  exclude:
+    - .git/**
+
 functions:
   log:
     handler: src/log.log
