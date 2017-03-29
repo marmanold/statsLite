@@ -7,9 +7,7 @@ var parser = require('ua-parser-js');
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.log = (event, context, callback) => {
-    const data = JSON.parse(event.body);
-
+function logVisit(data) {
     const date = new Date();
     const isoTime = date.toISOString();
 
@@ -29,6 +27,40 @@ module.exports.log = (event, context, callback) => {
         title: data.title,
         timestamp: isoTime
     };
+
+    return params;
+}
+
+function logBotVisit(data) {
+    const date = new Date();
+    const isoTime = date.toISOString();
+
+    const params = {
+        uuid: uuid.v4(),
+        site: data.site,
+        referrer: data.referrer,
+        uagent: data.browser,
+        page: data.page,
+        title: '*bot*',
+        timestamp: isoTime
+    };
+
+    return params;
+}
+
+module.exports.log = (event, context, callback) => {
+    const data = JSON.parse(event.body);
+
+    const botPattern = "(bot|google|aolbuild|baidu|bing|msn|duckduckgo|teoma|slurp|yandex)";
+    const botRegex = new RegExp(botPattern, 'i');
+
+    let params = {};
+    if (botRegex.test(data.browser)) {
+        params = logBotVisit(data);
+    }
+    else {
+        params = logVisit(data);
+    }
 
     const dbParams = {
         TableName: process.env.DYNAMODB_TABLE,
