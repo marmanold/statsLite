@@ -9,7 +9,7 @@
     "url": "https://github.com/marmanold/statsLite.git"
   },
   "dependencies": {
-    "ua-parser-js": "^0.7.12",
-    "uuid": "^3.0.1"
+    "ua-parser-js": "^0.7.17",
+    "uuid": "^3.2.1"
   }
 }

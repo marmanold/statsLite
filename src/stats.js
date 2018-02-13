@@ -1,3 +1,7 @@
+/*jslint esversion: 6*/
+/*jslint browser: true*/
+/*jslint node: true */
+
 'use strict';
 
 const AWS = require('aws-sdk');
@@ -31,11 +35,19 @@ module.exports.stats = (event, context, callback) => {
       return;
     }
 
-    // create a response
+    let resp_body;
+    if (data.bots) {
+      resp_body = JSON.stringify(result.Items);
+    }
+    else {
+      resp_body = JSON.stringify(result.Items.filter(item => item.title != '*bot*'));
+    }
+
+    // create default a response
     const response = {
       statusCode: 200,
       headers: {"Access-Control-Allow-Origin" : "*"}, 
-      body: JSON.stringify(result.Items),
+      body: resp_body,
     };
     callback(null, response);
   });

@@ -1,3 +1,7 @@
+/*jslint esversion: 6*/
+/*jslint browser: true*/
+/*jslint node: true */
+
 'use strict';
 
 const uuid = require('uuid');
