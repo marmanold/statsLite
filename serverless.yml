@@ -1,10 +1,8 @@
 service: statsLite
 
-frameworkVersion: ">=1.7.0 <2.0.0"
-
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
   environment:
     DYNAMODB_TABLE: statsLiteLog
     DYNAMODB_SITE_INDEX: site-timestamp-index

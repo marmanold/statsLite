@@ -8,8 +8,12 @@
     "type": "git",
     "url": "https://github.com/marmanold/statsLite.git"
   },
+  "devDependencies": {
+    "serverless": "^1.54.0"
+  },
   "dependencies": {
-    "ua-parser-js": "^0.7.18",
-    "uuid": "^3.3.2"
+    "ua-parser-js": "^0.7.20",
+    "uuid": "^3.3.3",
+    "aws-sdk": "^2.553.0"
   }
 }
