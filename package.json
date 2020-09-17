@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.646.0",
-    "ua-parser-js": "^0.7.21",
+    "ua-parser-js": "^0.7.22",
     "uuid": "^3.4.0"
   }
 }
