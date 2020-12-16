@@ -12,7 +12,7 @@
     "serverless": "^2.14.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.802.0",
+    "aws-sdk": "^2.811.0",
     "ua-parser-js": "^0.7.22",
     "uuid": "^3.4.0"
   }
